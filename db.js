@@ -3,9 +3,7 @@ var mysql = require('mysql');
 var con = mysql.createConnection({
     host: "if.unismuh.ac.id",
     user: "root",
-    password: "mariabelajar",
-    database: "mahasiswa",
-    port: "3388"
+    database: "mahasiswa"
 });
 
 con.connect(function (err) {
