@@ -2,7 +2,6 @@ var mysql = require('mysql');
 
 var con = mysql.createConnection({
     host: "if.unismuh.ac.id",
-    user: "root",
     database: "mahasiswa"
 });
 
