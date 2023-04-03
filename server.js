@@ -1,16 +1,18 @@
 const express = require('express');
 const server = express();
 const { getAll, getOne } = require('./service');
-const { generateTOTP, validateTOTP } = require('./totp');
-
+const { validateTOTP } = require('./totp');
+const cors = require('cors');
 server.use(express.json());
+server.use(cors());
 
-const validator = (req, res, next) => {
+const validator = (req) => {
     const { totp, secret } = req.headers;
+    console.log(totp, 'totp', secret, 'secret');
     if (validateTOTP(secret, totp)) {
-        next();
+        return true;
     } else {
-        res.status(401).json({ message: 'Unauthorized' });
+        return false;
     }
 };
 
@@ -20,9 +22,10 @@ server.get('/all-mahasiswa', (req, res) => {
         if (valid) {
             getAll(req, res);
         } else {
-            res.status(401).json({ message: 'Unauthorized' });
+            res.status(401).json({ message: 'Unauthorized, User tidak mempunyai akses' });
         }
     } catch (err) {
+        console.log(err);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
@@ -33,7 +36,7 @@ server.get('/mahasiswa/:nim', (req, res) => {
         if (valid) {
             getOne(req, res);
         } else {
-            res.status(401).json({ message: 'Unauthorized' });
+            res.status(401).json({ message: 'Unauthorized, User tidak mempunyai akses' });
         }
     } catch (err) {
         res.status(500).json({ message: 'Internal Server Error' });
